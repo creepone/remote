@@ -1,0 +1,32 @@
+extends layout
+
+block head
+    title Register
+    script(src="/js/register.js")
+    link(rel="stylesheet", href="/styles/register.css")
+
+block content
+    a(href="/login")
+        .alert.alert-success Successful registration, click to login
+
+    form
+        input.form-control(name="email", type="email", placeholder="Email", value=email)
+        if !authToken
+            input.form-control(name="password", type="password", placeholder="Password")
+            input.form-control(name="repeat-password", type="password", placeholder="Repeat password")
+        else
+            #linkedProvider
+                h6 Linked with
+                img.provider(src="/img/" + provider + ".png")
+                a(href="/register") (switch)
+        input.form-control(name="firstName", type="text", placeholder="First name", value=firstName)
+        input.form-control(name="lastName", type="text", placeholder="Last name", value=lastName)
+        button.btn.btn-primary(type="submit") Register
+        input(name="authToken", type="hidden", value=authToken)
+
+    if !authToken
+        hr
+        #providers
+            h6 Register with
+            a(href="/register/google")
+                img(src="/img/google.png")

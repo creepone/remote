@@ -1,0 +1,18 @@
+extends layout
+
+block head
+    title Login
+    script(src="/js/login.js")
+    link(rel="stylesheet",href="/styles/login.css")
+
+block content
+    form
+        input.form-control(name="email", type="text", placeholder="Email")
+        input.form-control(name="password", type="password", placeholder="Password")
+        button.btn.btn-primary(type="submit") Login
+        a.btn.btn-default(href="/register") Register
+    hr
+    #providers
+        h6 Login with
+        a(href="/login/google")
+            img(src="/img/google.png")

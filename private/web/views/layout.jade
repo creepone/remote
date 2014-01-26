@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    block head
+    script.data(type="text/json")!= JSON.stringify(data)
+
+  body
+    .navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+      a.navbar-brand(href="/") Remote
+      block header-content
+
+    .container
+        #alert
+        block content

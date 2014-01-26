@@ -1,0 +1,10 @@
+{
+    "browserify": {
+        "transform": [ "browserify-shim" ]
+    },
+    "browserify-shim": {
+        "./lib/q.min.js": "Q",
+        "./lib/jquery.js": "$",
+        "./lib/bootstrap.js": { "depends": "./lib/jquery.js:jQuery" }
+    }
+}
