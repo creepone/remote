@@ -15,7 +15,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "passport": "0.1.x",
     "passport-local": "0.1.x",
-    "passport-google": "0.3.x"
+    "passport-google": "0.3.x",
+    "password-generator": "~0.2.2"
   },
   "engines": {
     "node": "0.10.x",

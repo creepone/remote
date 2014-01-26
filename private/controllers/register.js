@@ -1,5 +1,6 @@
 var db = require("../db"),
-    crypto = require("crypto");
+    crypto = require("crypto"),
+    generatePassword = require("password-generator");
 
 exports.render = function (req, res) {
 
@@ -44,6 +45,8 @@ exports.post = function (req, res) {
     // replace the plain text password with its hash before saving into db
     if (user.password)
         user.password = crypto.createHash('md5').update(user.password).digest("hex");
+
+    user.slaveToken = generatePassword(20, false);
 
     db.getUser({ email: user.email })
         .then(function(duplicate) {

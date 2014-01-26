@@ -6,7 +6,8 @@ exports.render = function (req, res) {
 
     res.render("index", {
         data: {
-            username: req.user.displayName()
+            username: req.user.displayName(),
+            slaveToken: req.user.slaveToken
         }
     });
 };
