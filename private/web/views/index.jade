@@ -9,7 +9,6 @@ block header-content
   a.navbar-text.navbar-right.needs-user#logout(href="#"): i.glyphicon.glyphicon-eject
   p.navbar-text.navbar-right#username= (data.username || "")
 
-
 block content
   #loader
     .well.well-transparent.lead.text-center
@@ -18,3 +17,8 @@ block content
   .needs-user
     h4 Slave token
     pre= data.slaveToken
+
+    h4 Slaves
+    pre
+      each slave in (data.slaves || [])
+        p= slave.name

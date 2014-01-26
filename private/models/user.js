@@ -1,7 +1,12 @@
-var _ = require("underscore");
+var _ = require("underscore"),
+    ObjectID = require("mongodb").ObjectID;
+
 
 var User = function(o) {
     _.extend(this, o);
+
+    if (typeof this._id === "string")
+        this._id = new ObjectID(this._id);
 }
 
 _.extend(User.prototype, {

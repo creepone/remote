@@ -1,9 +1,13 @@
-var express = require("express"),
+var http = require("http"),
+    io = require("socket.io"),
+    express = require("express"),
     jade = require("jade"),
     router = require("./private/router"),
-    authentication = require("./private/authentication");
+    authentication = require("./private/authentication"),
+    dispatcher = require("./private/dispatcher");
 	
-var app = express();
+var app = express(),
+    server = http.createServer(app);
 
 app.configure(function () {
     app.set("url", process.env.APP_URL)
@@ -21,4 +25,5 @@ app.configure(function () {
     router.init(app);
 });
 
-app.listen(process.env.PORT || 8082);
+dispatcher.init(io.listen(server));
+server.listen(process.env.PORT || 8082);
