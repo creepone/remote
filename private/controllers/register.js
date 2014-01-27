@@ -30,8 +30,10 @@ exports.render = function (req, res) {
         authToken: authToken,
         email: email || "",
         firstName: firstName || "",
-        lastName : lastName || "",
-        data: {}
+        lastName: lastName || "",
+        data: {
+            codeRequired: !!process.env.APP_REGISTRATION_CODE,
+        }
     });
 };
 
@@ -41,6 +43,13 @@ exports.post = function (req, res) {
 
     if (!user.email || (!user.authToken && !user.password) || !user.firstName || !user.lastName)
         return res.json({ error: "Missing data from the form" });
+
+    var registrationCode = process.env.APP_REGISTRATION_CODE || "";
+    if (registrationCode) {
+        if (user.registrationCode !== registrationCode)
+            return res.json({ error: "Invalid registration code." });
+        delete user.registrationCode;
+    }
 
     // replace the plain text password with its hash before saving into db
     if (user.password)

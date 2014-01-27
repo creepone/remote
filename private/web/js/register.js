@@ -5,7 +5,9 @@ var $ = require("./lib/jquery"),
 
 require("./lib/bootstrap");
 
-$(function() {
+$(function () {
+    _data = JSON.parse($(".data").html());
+
     $("button[type='submit']").click(onRegisterClick);
 
     $("input").blur(function () {
@@ -33,7 +35,7 @@ function onRegisterClick(event) {
 
 function validate() {
     var authToken = $("input[name='authToken']").val();
-    var email, password, repeatPassword, firstName, lastName;
+    var email, password, repeatPassword, firstName, lastName, registrationCode;
 
     if (!(email = validateField("email", "Email missing")))
         return false;
@@ -59,12 +61,16 @@ function validate() {
     if (!(lastName = validateField("lastName", "Last name missing")))
         return false;
 
+    if (_data.codeRequired && !(registrationCode = validateField("registrationCode", "Registration code missing")))
+        return false;
+
     return {
         email: email,
         password: password,
         authToken: authToken,
         firstName: firstName,
-        lastName: lastName
+        lastName: lastName,
+        registrationCode: registrationCode
     };
 }
 
