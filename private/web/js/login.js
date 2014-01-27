@@ -5,14 +5,41 @@ var $ = require("./lib/jquery"),
 
 require("./lib/bootstrap");
 
-$(function() {
-    $("button[type='submit']").click(onLoginClick);
-    $("[name='email']").focus();
+$(function () {
+    if (autoAuthenticate())
+        return;
 
     var uri = tools.parseUri(location);
     if (uri.queryKey && uri.queryKey.fail)
         tools.reportError("Provider login failed : " + uri.queryKey.fail);
+
+    createView();
 });
+
+
+function createView()
+{
+    $("button[type='submit']").click(onLoginClick);
+    $("[name='email']").focus();
+
+    $("[data-passport]").click(onPassportClick);
+}
+
+function autoAuthenticate()
+{
+    var passport = localStorage && localStorage.getItem("passport");
+    if (!passport)
+        return false;
+    
+    var url = $("[data-passport=\"" + passport + "\"]").attr("href");
+    if (url)
+    {
+        window.location.href = url;
+        return true;
+    }
+
+    return false;
+}
 
 function onLoginClick(event)
 {
@@ -26,4 +53,11 @@ function onLoginClick(event)
         window.location.href = "/";
     },
     tools.reportError);
+}
+
+function onPassportClick(event)
+{
+    var passport = $(this).attr("data-passport");
+    if (localStorage)
+        localStorage.setItem("passport", passport);
 }

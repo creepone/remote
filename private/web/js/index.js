@@ -32,6 +32,9 @@ function onLogoutClick(event)
 
     services.logout()
         .done(function () {
+            if (localStorage && localStorage.getItem("passport"))
+                localStorage.removeItem("passport");
+
             window.location.href = "/";
         },
         tools.reportError);
