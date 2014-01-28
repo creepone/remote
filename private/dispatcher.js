@@ -35,6 +35,7 @@ function registerSlave(o, socket) {
             slaves.push({
                 user: user,
                 name: findUniqueName(o.name),
+                commands: o.commands,
                 socket: socket
             });
         });

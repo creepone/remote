@@ -19,6 +19,8 @@ block content
     pre= data.slaveToken
 
     h4 Slaves
-    pre
+    ul.list-group
       each slave in (data.slaves || [])
-        p= slave.name
+        li.list-group-item
+          h4.list-group-item-heading= slave.name
+          p.list-group-item-text= slave.commands.join(",")
