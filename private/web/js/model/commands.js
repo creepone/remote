@@ -5,12 +5,18 @@ var $ = require("../lib/jquery"),
 var queue = [];
 
 function tryGetResult(commandId) {
+    var start = +new Date();
+    console.log("getting result");
+
     return services.getCommandResult(commandId)
         .then(function (res) {
             if (res && ("result" in res))
                 return res.result;
-            else
-                return tryGetResult(commandId);
+            else {
+                var end = +new Date();
+                var gap = Math.max(0, 2000 + start - end);
+                return Q.delay(gap).then(tryGetResult.bind(null, commandId));
+            }
         });
 }
 
@@ -25,7 +31,7 @@ $.extend(exports, {
             .then(function (cmd) {
                 return tryGetResult(cmd.id);
             })
-            .timeout(10000)
+            .timeout(15000)
             .finally(function() {
                 queue = queue.filter(function (cmd) { return cmd !== o });
             });
