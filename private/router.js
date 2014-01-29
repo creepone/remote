@@ -1,7 +1,8 @@
 var authentication = require("./authentication"),
     index = require("./controllers/index"),
     login = require("./controllers/login"),
-    register = require("./controllers/register");
+    register = require("./controllers/register"),
+    dispatcher = require("./dispatcher");
 
 var routes = [
     // web services
@@ -11,6 +12,8 @@ var routes = [
     { path: "/login/google/return", method: authentication.login.google["return"] },
     { path: "/register/google", method: authentication.register.google.init },
     { path: "/register/google/return", method: authentication.register.google["return"] },
+    { path: "/dispatcher/execute", method: dispatcher.execute, verb: "POST" },
+    { path: "/dispatcher/execute/result/:id", method: dispatcher.getCommandResult },
 
     // web pages
     { path: "/", method: index.render },

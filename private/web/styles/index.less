@@ -25,3 +25,23 @@
   margin-right: 0;
   margin-left: 10px;
 }
+
+li.list-group-item i, li.list-group-item img {
+  float: right;
+}
+
+li.list-group-item:hover, li.list-group-item:active {
+  background-color: #d9edf7;
+}
+
+li.list-group-item.busy i.glyphicon.glyphicon-chevron-right {
+  display: none;
+}
+
+li.list-group-item img {
+  display: none;
+}
+
+li.list-group-item.busy img {
+  display: block;
+}

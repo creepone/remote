@@ -27,6 +27,45 @@ _.extend(exports, {
                 users.insert(o, { w : 1 }, deferred.makeNodeResolver());
                 return deferred.promise;
             });
+    },
+
+    /*
+     Queries the database for the user with properties specified in o.
+     */
+    getExecution: function(o)
+    {
+        return _getCollection("executions")
+            .then(function (executions) {
+                var deferred = Q.defer();
+                executions.findOne(o, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
+    },
+
+    /*
+     Inserts the given execution into the database.
+     */
+    insertExecution: function(o)
+    {
+        return _getCollection("executions")
+            .then(function (executions) {
+                var deferred = Q.defer();
+                executions.insert(o, { w : 1 }, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
+    },
+
+    /*
+     Updates the given execution in the database.
+     */
+    updateExecution: function(patch, o)
+    {
+        return _getCollection("executions")
+            .then(function(executions) {
+                var deferred = Q.defer();
+                executions.findAndModify(patch, [], o, { w: 1 }, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
     }
 });
 

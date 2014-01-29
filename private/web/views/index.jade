@@ -15,12 +15,16 @@ block content
       img(src="../img/spinner.gif")
 
   .needs-user
+    h4 Slaves
+    each slave in (data.slaves || [])
+      .panel.panel-default(data-slave=slave.name)
+          .panel-heading= slave.name
+          ul.list-group
+            each command in (slave.commands)
+              li.list-group-item(data-command=command)
+                span= command
+                i.glyphicon.glyphicon-chevron-right
+                img(src="/img/loader.gif")
+    hr
     h4 Slave token
     pre= data.slaveToken
-
-    h4 Slaves
-    ul.list-group
-      each slave in (data.slaves || [])
-        li.list-group-item
-          h4.list-group-item-heading= slave.name
-          p.list-group-item-text= slave.commands.join(",")

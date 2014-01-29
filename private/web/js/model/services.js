@@ -30,6 +30,22 @@ $.extend(exports, {
             contentType: "application/json; charset=utf-8"
         });
     },
+    executeCommand: function (command) {
+        return ajax({
+            type: "POST",
+            url: "/dispatcher/execute",
+            dataType: "json",
+            data: JSON.stringify(command),
+            contentType: "application/json; charset=utf-8"
+        });
+    },
+    getCommandResult: function (commandId) {
+        return ajax({
+            type: "GET",
+            url: "/dispatcher/execute/result/" + commandId,
+            dataType: "json"
+        });
+    },
     logout: function () {
         return ajax({
             type: "POST",
