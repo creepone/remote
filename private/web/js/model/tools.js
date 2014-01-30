@@ -49,3 +49,15 @@ exports.reportError = function(error) {
     setTimeout(function () { $("#alert .alert").alert("close"); }, 2000);
     console.log(error);
 };
+
+exports.reportSuccess = function(title, message) {
+    var $alert = $("<div />").addClass("alert alert-success fade in");
+    $("<button />").attr({ type: "button", "data-dismiss": "alert" }).addClass("close").html("&times;").appendTo($alert);
+    $("<b />").text(title).appendTo($alert);
+    $("<br />").appendTo($alert);
+    $("<span />").text(message).appendTo($alert);
+
+    $(".container").prepend($alert);
+    $alert.alert();
+    $alert.click(function () { $alert.alert("close"); });
+};

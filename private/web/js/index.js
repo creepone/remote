@@ -57,14 +57,7 @@ function onCommandClick(event)
 
     commands.execute(o)
         .then(function (result) {
-            var $alert = $("<div />").addClass("alert alert-success fade in");
-            $("<button />").attr({ type: "button", "data-dismiss": "alert" }).addClass("close").html("&times;").appendTo($alert);
-            $("<b />").text(slave + " / " + command).appendTo($alert);
-            $("<br />").appendTo($alert);
-            $("<span />").text(result).appendTo($alert);
-
-            $(".container").prepend($alert);
-            $alert.alert();
+            tools.reportSuccess(slave + " / " + command, result);
         },
         tools.reportError)
         .finally(function () {
