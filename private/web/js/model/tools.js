@@ -1,6 +1,11 @@
 var $ = require("../lib/jquery"),
     Q = require("../lib/q.min");
 
+$(function () {
+    // reveal all the ui (preventing flash of unstyled content)
+    $(".fouc").removeClass("fouc");
+})
+
 exports.parseUri = function(str) {
 
     // parseUri 1.2.2

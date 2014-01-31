@@ -6,10 +6,10 @@ html
     script.data(type="text/json")!= JSON.stringify(data)
 
   body
-    .navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+    .navbar.navbar-inverse.navbar-fixed-top(role="navigation").fouc
       a.navbar-brand(href="/") Remote
       block header-content
 
-    .container
+    .container.fouc
         #alert
         block content
