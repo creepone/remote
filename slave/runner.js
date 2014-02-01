@@ -10,7 +10,7 @@ var Command = require("./commands/" + path.basename(script, ".js"));
 var cmd = new Command(args);
 cmd.execute()
     .done(function (result) {
-        console.log(JSON.stringify(result));
+        console.log(result);
         exit(0);
     },
     function (error) {
