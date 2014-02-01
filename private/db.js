@@ -30,7 +30,7 @@ _.extend(exports, {
     },
 
     /*
-     Queries the database for the user with properties specified in o.
+     Queries the database for the execution with properties specified in o.
      */
     getExecution: function(o)
     {
@@ -64,6 +64,45 @@ _.extend(exports, {
             .then(function(executions) {
                 var deferred = Q.defer();
                 executions.findAndModify(patch, [], o, { w: 1 }, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
+    },
+
+    /*
+     Queries the database for the settings with properties specified in o.
+     */
+    getSettings: function(o)
+    {
+        return _getCollection("settings")
+            .then(function (settings) {
+                var deferred = Q.defer();
+                settings.findOne(o, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
+    },
+
+    /*
+     Inserts the given settings into the database.
+     */
+    insertSettings: function(o)
+    {
+        return _getCollection("settings")
+            .then(function (settings) {
+                var deferred = Q.defer();
+                settings.insert(o, { w : 1 }, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
+    },
+
+    /*
+     Updates the given settings in the database.
+     */
+    updateSettings: function(patch, o)
+    {
+        return _getCollection("settings")
+            .then(function(settings) {
+                var deferred = Q.defer();
+                settings.findAndModify(patch, [], o, { w: 1 }, deferred.makeNodeResolver());
                 return deferred.promise;
             });
     }

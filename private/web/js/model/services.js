@@ -30,6 +30,15 @@ $.extend(exports, {
             contentType: "application/json; charset=utf-8"
         });
     },
+    saveSettings: function(settings) {
+        return ajax({
+            type: "POST",
+            url: "/settings/save",
+            dataType: "json",
+            data: JSON.stringify({ settings: settings }),
+            contentType: "application/json; charset=utf-8"
+        });
+    },
     executeCommand: function (command) {
         return ajax({
             type: "POST",

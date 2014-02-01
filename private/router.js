@@ -14,6 +14,7 @@ var routes = [
     { path: "/register/google/return", method: authentication.register.google["return"] },
     { path: "/dispatcher/execute", method: dispatcher.execute, verb: "POST" },
     { path: "/dispatcher/execute/result/:id", method: dispatcher.getCommandResult },
+    { path: "/settings/save", method: index.saveSettings, verb: "POST" },
 
     // web pages
     { path: "/", method: index.render },

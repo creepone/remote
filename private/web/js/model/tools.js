@@ -39,30 +39,39 @@ exports.parseUri = function(str) {
     return uri;
 };
 
-exports.reportError = function(error) {
-    var msg = "Error occured when communicating with the server.";
+exports.reportError = function(error, $container) {
+    $container = $container || $(".container");
 
+    var message;
     if (typeof error == "string")
-        msg = error;
+        message = error;
     else if (error.message)
-        msg = error.message;
+        message = error.message;
+    else
+        message = "Error occured when communicating with the server.";
 
-    $("#alert").html("<div class=\"alert alert-danger fade in\">" +
-        "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
-        msg + "</div>");
+    var $alert = $("<div />").addClass("alert alert-danger fade in");
+    $("<button />").attr({ type: "button", "data-dismiss": "alert" }).addClass("close").html("&times;").appendTo($alert);
+    $("<span />").text(message).appendTo($alert);
 
-    setTimeout(function () { $("#alert .alert").alert("close"); }, 2000);
+    $container.prepend($alert);
+    $alert.alert();
+    $alert.click(function () { $alert.alert("close"); });
+
+    setTimeout(function () { $alert.alert("close"); }, 5000);
     console.log(error);
 };
 
-exports.reportSuccess = function(title, message) {
+exports.reportSuccess = function(title, message, $container) {
+    $container = $container || $(".container");
+
     var $alert = $("<div />").addClass("alert alert-success fade in");
     $("<button />").attr({ type: "button", "data-dismiss": "alert" }).addClass("close").html("&times;").appendTo($alert);
     $("<b />").text(title).appendTo($alert);
     $("<br />").appendTo($alert);
     $("<span />").text(message).appendTo($alert);
 
-    $(".container").prepend($alert);
+    $container.prepend($alert);
     $alert.alert();
     $alert.click(function () { $alert.alert("close"); });
 };
