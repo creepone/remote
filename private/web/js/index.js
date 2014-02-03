@@ -8,10 +8,13 @@ var $ = require("./lib/jquery"),
 require("./lib/bootstrap");
 require("./lib/codemirror_javascript");
 
+var IndexPage = require("./model/index").IndexPage;
+
 var _settingsArea;
 
 $(function() {
     _data = JSON.parse($(".data").html());
+    window._model = new IndexPage(_data, { parse: true });
 
     if (!_data.username) {
         window.location.href = "/login";

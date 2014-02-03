@@ -20,6 +20,20 @@ exports.init = function(app) {
     passport.deserializeUser(function(user, done) {
         done(null, new User(JSON.parse(user)));
     });
+}; 
+
+exports.filterService = function(req, res, next) {
+	if (req.user)
+		return next();
+	else
+		res.send(403);
+};  
+
+exports.filterPage = function(req, res, next) {
+	if (req.user)
+		return next();
+	else
+		res.redirect("/login");
 };
 
 exports.login = {

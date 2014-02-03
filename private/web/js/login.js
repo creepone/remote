@@ -6,12 +6,11 @@ var $ = require("./lib/jquery"),
 require("./lib/bootstrap");
 
 $(function () {
-    if (autoAuthenticate())
-        return;
-
     var uri = tools.parseUri(location);
     if (uri.queryKey && uri.queryKey.fail)
-        tools.reportError("Provider login failed : " + uri.queryKey.fail);
+        onLoginFailed(uri.queryKey.fail); 
+	else if (autoAuthenticate())
+		return;
 
     createView();
 });
@@ -60,4 +59,11 @@ function onPassportClick(event)
     var passport = $(this).attr("data-passport");
     if (localStorage)
         localStorage.setItem("passport", passport);
+}
+
+function onLoginFailed(provider)
+{
+	if (localStorage && localStorage.getItem("passport"))
+        localStorage.removeItem("passport");
+	tools.reportError("Provider login failed : " + provider); 
 }

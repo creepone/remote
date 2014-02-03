@@ -27,9 +27,6 @@ exports.render = function (req, res) {
 };
 
 exports.saveSettings = function (req, res) {
-    if (!req.user)
-        return res.send({ error: "SessionExpired" });
-
     db.getSettings({ userId: req.user._id })
         .then(function (settings) {
             if (settings)

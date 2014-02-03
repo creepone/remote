@@ -27,10 +27,6 @@ exports.slaves = function (user) {
 };
 
 exports.execute = function (req, res) {
-
-    if (!req.user)
-        return res.send({ error: "SessionExpired" });
-
     var slave = _.find(slaves, function (s) { return s.name === req.body.slave && s.user._id.equals(req.user._id); });
     if (!slave)
         return res.send({ error: "Slave not found." });
@@ -56,10 +52,6 @@ exports.execute = function (req, res) {
 };
 
 exports.getCommandResult = function (req, res) {
-
-    if (!req.user)
-        return res.send({ error: "SessionExpired" });
-
     db.getExecution({ _id: new ObjectID(req.params.id) })
         .done(function (execution) {
             res.send(_.pick(execution, "result", "error"));

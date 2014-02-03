@@ -6,7 +6,7 @@ var $ = require("./lib/jquery"),
 require("./lib/bootstrap");
 
 $(function () {
-    _data = JSON.parse($(".data").html());
+    _data = JSON.parse($(".data").html()); 
 
     $("button[type='submit']").click(onRegisterClick);
 

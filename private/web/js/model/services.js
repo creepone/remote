@@ -1,4 +1,6 @@
 var $ = require("../lib/jquery"),
+	Backbone = require("../lib/backbone"),
+	tools = require("./tools"),
     Q = require("../lib/q.min");
 
 function ajax(o) {
@@ -8,8 +10,16 @@ function ajax(o) {
                 throw new Error(data.error);
             else
                 return data;
-        });
+        }, 
+		function (res) {
+			if (res.status == 403)
+				window.location.href = "/login";
+			else if (res.status == 500)
+				tools.reportError(res.responseText, o.alertContainer);
+		});
 }
+
+Backbone.ajax = function(o) { ajax(o).done(); };
 
 $.extend(exports, {
     login: function (credentials) {

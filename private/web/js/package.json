@@ -6,6 +6,8 @@
         "./lib/q.min.js": "Q",
         "./lib/jquery.js": "$",
         "./lib/codemirror.js": "CodeMirror",
+        "./lib/underscore.js": "_",
+        "./lib/backbone.js": { "exports": "Backbone", "depends": ["./lib/jquery.js:jQuery", "./lib/underscore.js:_"] },
         "./lib/bootstrap.js": { "depends": "./lib/jquery.js:jQuery" }
     }
 }
