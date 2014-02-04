@@ -1,5 +1,6 @@
 var db = require("./db"),
     _ = require("underscore"),
+    Q = require("q"),
     ObjectID = require("mongodb").ObjectID;
 
 var slaves = [];
@@ -49,9 +50,10 @@ exports.execute = function (req, res) {
 };
 
 exports.getCommandResult = function (req, res) {
-    return db.getExecution({ _id: new ObjectID(req.params.id) })
-        .then(function (execution) {
-            res.send(_.pick(execution, "result", "error"));
+    // repeatedly try to get the result within a time limit of 5s
+    return tryGetResult(new ObjectID(req.params.id), +new Date() + 5000)
+        .then(function (result) {
+            res.send(result);
         });
 };
 
@@ -97,4 +99,20 @@ function unregisterSlave(socket) {
 function onCommandDone(o) {
     var $set = _.pick(o, "error", "result");
     db.updateExecution({ _id: new ObjectID(o.id) }, { $set: $set }).done();
+}
+
+function tryGetResult(executionId, timeLimit) {
+    var start = +new Date();
+    if (start > timeLimit)
+        return Q(null);
+    
+    return db.getExecution({ _id: executionId })
+       .then(function (execution) {
+           if (execution.error)
+               throw new Error(error);
+           else if ("result" in execution)
+               return execution.result;
+
+           return Q.delay(500).then(tryGetResult.bind(null, executionId, timeLimit));
+       });
 }

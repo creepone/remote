@@ -4,20 +4,17 @@ var $ = require("../lib/jquery"),
 
 var queue = [];
 
-function tryGetResult(commandId, limit) {
-    var start = +new Date();
-    if (start > limit)
+function getCommandResult(commandId, retries) {
+    if (!retries)
         throw new Error("Command timed out.");
 
     return services.getCommandResult(commandId)
         .then(function (res) {
-            if (res && ("result" in res))
-                return res.result;
-            else {
-                var end = +new Date();
-                var gap = Math.max(0, 2000 + start - end);
-                return Q.delay(gap).then(tryGetResult.bind(null, commandId, limit));
-            }
+            if (res)
+                return res;
+
+            retries--;
+            return getCommandResult(commandId, retries);
         });
 }
 
@@ -30,7 +27,7 @@ $.extend(exports, {
 
         return services.executeCommand(o)
             .then(function (cmd) {
-                return tryGetResult(cmd.id, + new Date() + 15000);
+                return getCommandResult(cmd.id, 3);
             })
             .finally(function() {
                 queue = queue.filter(function (cmd) { return cmd !== o });
