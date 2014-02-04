@@ -10,8 +10,8 @@ function getCommandResult(commandId, retries) {
 
     return services.getCommandResult(commandId)
         .then(function (res) {
-            if (res)
-                return res;
+            if (res && ("result" in res))
+                return res.result;
 
             retries--;
             return getCommandResult(commandId, retries);

@@ -53,7 +53,7 @@ exports.getCommandResult = function (req, res) {
     // repeatedly try to get the result within a time limit of 5s
     return tryGetResult(new ObjectID(req.params.id), +new Date() + 5000)
         .then(function (result) {
-            res.send(result);
+            res.send(result && { result: result });
         });
 };
 
