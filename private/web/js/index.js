@@ -1,25 +1,27 @@
 var $ = require("./lib/jquery"),
-    Q = require("./lib/q.min"),
     CodeMirror = require("./lib/codemirror"),
     tools = require("./model/tools"),
-    services = require("./model/services"),
-    commands = require("./model/commands");
+    services = require("./model/services");
 
 require("./lib/bootstrap");
 require("./lib/codemirror_javascript");
 
-var IndexPage = require("./model/index").IndexPage;
+var IndexPageModel = require("./model/index").IndexPageModel,
+    IndexPageView = require("./views/index").IndexPageView;
 
 var _settingsArea;
 
 $(function() {
     _data = JSON.parse($(".data").html());
-    window._model = new IndexPage(_data, { parse: true });
 
-    if (!_data.username) {
-        window.location.href = "/login";
-        return;
-    }
+    // todo: extend the container from #slaves to the entire page, refactor the rest
+
+    var page = new IndexPageView({ 
+        model: new IndexPageModel(_data), 
+        el: $("#slaves")[0] 
+    });
+
+    page.render();
 
     _createView();
 });
@@ -33,8 +35,6 @@ function _createView()
     $("#logout").click(onLogoutClick);
     $("#settings").click(onSettingsClick);
     $("#saveSettings").click(onSaveSettingsClick);
-
-    $("[data-command]").click(onCommandClick);
 }
 
 function onLogoutClick(event)
@@ -49,35 +49,6 @@ function onLogoutClick(event)
             window.location.href = "/";
         },
         tools.reportError);
-}
-
-function onCommandClick(event)
-{
-    var $el = $(this);
-
-    var slave = $el.closest("[data-slave]").attr("data-slave");
-    var command = $el.attr("data-command");
-    var args = $el.attr("data-args");
-    args = args ? JSON.parse(args) : {};
-
-    var caption = $el.attr("data-caption");
-
-    var o = { slave: slave, command: { name: command, args: args }};
-
-    if (commands.isExecuting(o))
-        return;
-
-    $el.addClass("busy");
-
-    commands.execute(o)
-        .then(function (result) {
-            tools.reportSuccess(slave + " / " + caption, result);
-        },
-        tools.reportError)
-        .finally(function () {
-            $el.removeClass("busy");
-        })
-        .done();
 }
 
 function onSettingsClick(event)

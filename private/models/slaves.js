@@ -10,7 +10,6 @@ function find(o) {
         
      return settingsPromise
         .then(function (settings) {
-            throw new Error("test error");
             return convertSlaves(slaves, settings);
         });
 };

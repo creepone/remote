@@ -1,4 +1,5 @@
 var db = require("./db"),
+    Q = require("q"),
     crypto = require("crypto"),
     User = require("./models/user").User,
     passport = require("passport"),
@@ -37,22 +38,27 @@ exports.filterPage = function(req, res, next) {
 };
 
 exports.login = {
-    local: function(req, res) {
+    local: function (req, res) {
+        var deferred = Q.defer();
+
         passport.authenticate("local", function (err, user) {
 
             if (err)
-                return res.json({ error: "Login error" });
+                return deferred.reject(err);
             else if (!user)
-                return res.json({ error: "Login failed" });
+                return deferred.reject(new Error("Login failed"));
 
             req.login(user, function(err) {
                 if (err)
-                    return res.json({ error: "Login error" });
+                    return deferred.reject(err);
 
-                return res.json({ success: true });
+                res.json({});
+                deferred.resolve();
             });
 
         })(req, res);
+
+        return deferred.promise;
     },
 
     google: {

@@ -9,8 +9,8 @@ $(function () {
     var uri = tools.parseUri(location);
     if (uri.queryKey && uri.queryKey.fail)
         onLoginFailed(uri.queryKey.fail); 
-	else if (autoAuthenticate())
-		return;
+    else if (autoAuthenticate())
+        return;
 
     createView();
 });

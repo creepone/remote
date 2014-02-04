@@ -7,19 +7,23 @@ function ajax(o) {
     return Q($.ajax(o))
         .then(function (data) {
             if (data.error)
-                throw new Error(data.error);
+                throw new Error(data.error); // todo: remove this when possible
             else
                 return data;
         }, 
-		function (res) {
-			if (res.status == 403)
-				window.location.href = "/login";
-			else if (res.status == 500)
-				tools.reportError(res.responseText, o.alertContainer);
-		});
+        function (res) {
+            if (res.status == 403)
+                window.location.href = "/login";
+            else if (res.status == 500)
+                throw new Error(res.responseText);
+        });
 }
 
-Backbone.ajax = function(o) { ajax(o).done(); };
+Backbone.ajax = function (o) {
+    ajax(o).catch(function (err) {
+        tools.reportError(err);
+    });
+};
 
 $.extend(exports, {
     login: function (credentials) {

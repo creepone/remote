@@ -29,7 +29,7 @@ exports.slaves = function (user) {
 exports.execute = function (req, res) {
     var slave = _.find(slaves, function (s) { return s.name === req.body.slave && s.user._id.equals(req.user._id); });
     if (!slave)
-        return res.send({ error: "Slave not found." });
+        throw new Error("Slave not found.");
 
     var id = new ObjectID();
 
@@ -40,24 +40,18 @@ exports.execute = function (req, res) {
         command: req.body.command
     };
 
-    db.insertExecution(execution)
-        .done(function () {
+    return db.insertExecution(execution)
+        .then(function () {
             var o = _.extend({ id: id.toString() }, req.body.command);
             slave.socket.emit("command", o);
             res.send({ id: id });
-        },
-        function (err) {
-            res.send({ error: "Execution failed. "});
         });
 };
 
 exports.getCommandResult = function (req, res) {
-    db.getExecution({ _id: new ObjectID(req.params.id) })
-        .done(function (execution) {
+    return db.getExecution({ _id: new ObjectID(req.params.id) })
+        .then(function (execution) {
             res.send(_.pick(execution, "result", "error"));
-        },
-        function (err) {
-            res.send({ error: "Retrieving command result failed. "});
         });
 };
 

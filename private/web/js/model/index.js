@@ -1,11 +1,33 @@
 var _ = require("../lib/underscore"),
-    Backbone = require("../lib/backbone");
+    Backbone = require("../lib/backbone"),
+    commands = require("./commands"),
+    tools = require("./tools");
    
 var Slave = Backbone.Model.extend({
-    
+    idAttribute: "name",
+
+    isCommandExecuting: function (index) {
+        var o = this._commandOptions(index);
+        return commands.isExecuting(o);
+    },
+    executeCommand: function (index) {
+        var o = this._commandOptions(index);
+        return commands.execute(o)
+            .then(function (result) {
+                tools.reportSuccess(o.slave + " / " + o.command.displayName, result);
+            },
+            tools.reportError)
+    },
+
+    _commandOptions: function (index) {
+        return {
+            slave: this.get("name"),
+            command: this.get("commands")[index]
+        };
+    }
 });
    
-var IndexPage = Backbone.Model.extend({
+var IndexPageModel = Backbone.Model.extend({
     constructor: function(o) {
         var Slaves = Backbone.Collection.extend({ 
             model: Slave,
@@ -17,5 +39,5 @@ var IndexPage = Backbone.Model.extend({
 });
 
 _.extend(exports, {
-    IndexPage: IndexPage
+    IndexPageModel: IndexPageModel
 });

@@ -3,11 +3,8 @@ var dispatcher = require("../dispatcher"),
     db = require("../db");
 
 exports.render = function (req, res) {
-    if (!req.user)
-        return res.render("index", { data: {} });
-
-    db.getSettings({ userId: req.user._id })
-        .done(function (result) {
+    return db.getSettings({ userId: req.user._id })
+        .then(function (result) {
             var slaves = dispatcher.slaves(req.user),
                 settings = result && result.body;
 
@@ -19,15 +16,11 @@ exports.render = function (req, res) {
                     settings: settings
                 }
             });
-        },
-        function (err) {
-            console.log(err);
-            res.send(500);
         });
 };
 
 exports.saveSettings = function (req, res) {
-    db.getSettings({ userId: req.user._id })
+    return db.getSettings({ userId: req.user._id })
         .then(function (settings) {
             if (settings)
                 return db.updateSettings({ userId: req.user._id }, {
@@ -39,12 +32,8 @@ exports.saveSettings = function (req, res) {
                 body: req.body.settings
             });
         })
-        .done(function () {
+        .then(function () {
             res.send({});
-        },
-        function (err) {
-            console.log(err);
-            res.send({ error: "Could not save the settings." });
         })
 };
 

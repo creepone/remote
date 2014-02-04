@@ -57,7 +57,7 @@ exports.post = function (req, res) {
 
     user.slaveToken = generatePassword(20, false);
 
-    db.getUser({ email: user.email })
+    return db.getUser({ email: user.email })
         .then(function(duplicate) {
             if (duplicate)
                 throw new Error("Email already in use");
@@ -65,11 +65,7 @@ exports.post = function (req, res) {
         .then(function() {
             return db.insertUser(user);
         })
-        .done(function () {
+        .then(function () {
             res.json({ success: true });
-        },
-        function(err) {
-            console.log(err);
-            res.json({ error: err.message || "Registration error" });
         });
 };
