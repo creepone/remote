@@ -31,7 +31,8 @@ var IndexPageModel = Backbone.Model.extend({
     constructor: function(o) {
         var Slaves = Backbone.Collection.extend({ 
             model: Slave,
-            url: "/slaves"
+            url: "/slaves",
+            comparator: "name"
         });
         o.slaves = new Slaves(o.slaves || []);
         Backbone.Model.apply(this, arguments);

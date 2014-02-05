@@ -4,7 +4,17 @@ var $ = require("../lib/jquery"),
 $(function () {
     // reveal all the ui (preventing flash of unstyled content)
     $(".fouc").removeClass("fouc");
-})
+});
+
+$.fn.insertAt = function (index, element) {
+    if (index === 0)
+        this.prepend(element);
+    else if (index > this.children().length)
+        this.append(element);
+    else
+        this.children(":nth-child(" + index + ")").after(element);
+    return this;
+};
 
 exports.parseUri = function(str) {
 

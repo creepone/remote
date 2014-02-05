@@ -44,12 +44,14 @@ var IndexPageView = Backbone.View.extend({
         setInterval(function () { model.get("slaves").fetch(); }, 60000);
     },
     onSlaveAdd: function (slave, slaves) {
-        // todo: define a comparator for the collection, find the index here and make sure to insert the view at the corresponding index
+        var index = slaves.indexOf(slave);
+
         var slaveView = new SlaveView({
-            model: slave,
-            el: $("<div />").appendTo(this.$el)[0]
+            model: slave
         });
-        this.slaveViews.push(slaveView);
+
+        this.$el.insertAt(index, slaveView.el);
+        this.slaveViews.splice(index, 0, slaveView);
         slaveView.render();
     },
     onSlaveRemove: function (slave, slaves) {
