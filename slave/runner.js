@@ -12,10 +12,6 @@ cmd.execute()
     .done(function (result) {
         console.log(result);
         exit(0);
-    },
-    function (error) {
-        console.log(error);
-        exit(1);
     });
 
 function exit(code)

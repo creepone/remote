@@ -53,7 +53,7 @@ exports.getCommandResult = function (req, res) {
     // repeatedly try to get the result within a time limit of 5s
     return tryGetResult(new ObjectID(req.params.id), +new Date() + 5000)
         .then(function (result) {
-            res.send(result && { result: result });
+            res.send(result);
         });
 };
 
@@ -104,14 +104,14 @@ function onCommandDone(o) {
 function tryGetResult(executionId, timeLimit) {
     var start = +new Date();
     if (start > timeLimit)
-        return Q(null);
+        return Q({ done: false });
     
     return db.getExecution({ _id: executionId })
        .then(function (execution) {
            if (execution.error)
-               throw new Error(error);
+               throw new Error(execution.error);
            else if ("result" in execution)
-               return execution.result;
+               return { result: execution.result, done: true };
 
            return Q.delay(500).then(tryGetResult.bind(null, executionId, timeLimit));
        });

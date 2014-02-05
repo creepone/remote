@@ -1,22 +1,18 @@
 var $ = require("../lib/jquery"),
-	Backbone = require("../lib/backbone"),
-	tools = require("./tools"),
+    _ = require("../lib/underscore"),
+    Backbone = require("../lib/backbone"),
+    tools = require("./tools"),
     Q = require("../lib/q.min");
 
 function ajax(o) {
     return Q($.ajax(o))
-        .then(function (data) {
-            if (data.error)
-                throw new Error(data.error); // todo: remove this when possible
-            else
-                return data;
-        }, 
-        function (res) {
-            if (res.status == 403)
-                window.location.href = "/login";
-            else if (res.status == 500)
-                throw new Error(res.responseText);
-        });
+        .then(_.identity,
+            function (res) {
+                if (res.status == 403)
+                    window.location.href = "/login";
+                else
+                    throw new Error(res.responseText || "Unknown error");
+            });
 }
 
 Backbone.ajax = function (o) {

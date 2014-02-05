@@ -35,10 +35,20 @@ _.extend(Commands.prototype, {
             result += data;
         });
 
+        var error = "";
+        runner.stderr.setEncoding("utf8");
+        runner.stderr.on("data", function (data) {
+            error += data;
+        });
+
         runner.on("exit", function (code) {
-            // todo: extract the actual result
-            result = code == 0 ? { result: result } : { error: result };
-            self.emit("done", _.extend({ id: id }, result));
+            var msg = { id: id };
+            if (code === 0)
+                msg.result = result || "Done.";
+            else
+                msg.error = error || "Unknown error.";
+
+            self.emit("done", msg);
         });
     },
     _load: function ()

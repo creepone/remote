@@ -1,7 +1,13 @@
 var $ = require("../lib/jquery"),
     _ = require("../lib/underscore"),
-    Backbone = require("../lib/backbone");
-   
+    Backbone = require("../lib/backbone"),
+    CodeMirror = require("../lib/codemirror"),
+    tools = require("../model/tools");
+
+// page script dependencies
+require("../lib/bootstrap");
+require("../lib/codemirror_javascript");
+
 var SlaveView = Backbone.View.extend({
     initialize: function() {
         this.listenTo(this.model, "change", this.render);
@@ -17,7 +23,7 @@ var SlaveView = Backbone.View.extend({
         this.setElement($el[0]);
     },
     executeCommand: function (event) {
-        var $el = $(event.target),
+        var $el = $(event.currentTarget),
             index = $el.index();
 
         if (this.model.isCommandExecuting(index))
@@ -25,6 +31,7 @@ var SlaveView = Backbone.View.extend({
 
         $el.addClass("busy");
         this.model.executeCommand(index)
+            .then(function (res) { tools.reportSuccess(res.name, res.result); }, tools.reportError)
             .finally(function () {
                 $el.removeClass("busy");
             })
@@ -43,6 +50,12 @@ var IndexPageView = Backbone.View.extend({
 
         setInterval(function () { model.get("slaves").fetch(); }, 60000);
     },
+    events: {
+        "click #logout": "onLogoutClick",
+        "click #settings": "onSettingsClick",
+        "click #saveSettings": "onSaveSettingsClick",
+        "shown.bs.modal .modal": "onModalShown"
+    },
     onSlaveAdd: function (slave, slaves) {
         var index = slaves.indexOf(slave);
 
@@ -50,7 +63,7 @@ var IndexPageView = Backbone.View.extend({
             model: slave
         });
 
-        this.$el.insertAt(index, slaveView.el);
+        this.$el.find("#slaves").insertAt(index, slaveView.el);
         this.slaveViews.splice(index, 0, slaveView);
         slaveView.render();
     },
@@ -63,11 +76,42 @@ var IndexPageView = Backbone.View.extend({
     render: function () {
         var self = this;
 
-        this.$el.empty();
+        this.$el.find("#loader").hide();
+
+        this.$el.find("#slaves").empty();
         var slaves = this.model.get("slaves");
         slaves.each(function (slave) {
             self.onSlaveAdd(slave, slaves);
         });
+    },
+    onLogoutClick: function (event) {
+        event.preventDefault();
+        this.model.logout().catch(tools.reportError);
+    },
+    onSettingsClick: function (event) {
+        this._settingsArea = this._settingsArea || CodeMirror.fromTextArea(this.$el.find("#settingsJson")[0], {
+            mode: { name: "javascript", json: true },
+            autofocus: true
+        });
+
+        this._settingsArea.setValue(this.model.getPrettySettings());
+        $(".modal").modal("show");
+    },
+    onSaveSettingsClick: function(event)
+    {
+        var $el = this.$el;
+
+        this.model.saveSettings(this._settingsArea.getValue())
+            .done(function () {
+                $el.find(".modal").modal("hide");
+            },
+            function (err) {
+                tools.reportError(err, $el.find(".modal-body"));
+            });
+
+    },
+    onModalShown: function (event) {
+        this._settingsArea.refresh();
     }
 });
 

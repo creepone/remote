@@ -7,8 +7,8 @@ block head
   link(rel="stylesheet",href="/styles/codemirror.css")
 
 block header-content
-  a.navbar-text.needs-user#settings(href="#"): i.glyphicon.glyphicon-wrench
-  a.navbar-text.navbar-right.needs-user#logout(href="#"): i.glyphicon.glyphicon-eject
+  a.navbar-text#settings(href="#"): i.glyphicon.glyphicon-wrench
+  a.navbar-text.navbar-right#logout(href="#"): i.glyphicon.glyphicon-eject
   p.navbar-text.navbar-right#username= (data.username || "")
 
 block content
