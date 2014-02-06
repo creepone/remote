@@ -1,33 +1,10 @@
 var _ = require("../lib/underscore"),
     Backbone = require("../lib/backbone"),
-    commands = require("./commands"),
     services = require("./services"),
-    tools = require("./tools");
-   
-var Slave = Backbone.Model.extend({
-    idAttribute: "name",
+    Slave = require("./slave").Slave;
 
-    isCommandExecuting: function (index) {
-        var o = this._commandOptions(index);
-        return commands.isExecuting(o);
-    },
-    executeCommand: function (index) {
-        var o = this._commandOptions(index);
-        return commands.execute(o)
-            .then(function (result) {
-                return { name: o.slave + " / " + o.command.displayName, result: result };
-            });
-    },
-
-    _commandOptions: function (index) {
-        return {
-            slave: this.get("name"),
-            command: this.get("commands")[index]
-        };
-    }
-});
-   
 var IndexPageModel = Backbone.Model.extend({
+    properties: "settings,slaves,slaveToken",
     constructor: function(o) {
         var Slaves = Backbone.Collection.extend({ 
             model: Slave,
@@ -48,7 +25,7 @@ var IndexPageModel = Backbone.Model.extend({
             });
     },
     getPrettySettings: function () {
-        var value = this.get("settings");
+        var value = this.settings;
         return value ? JSON.stringify(value, null, 4) : "";
     },
     saveSettings: function (jsonValue) {
@@ -58,8 +35,8 @@ var IndexPageModel = Backbone.Model.extend({
             .then(function (settings) {
                 return services.saveSettings(settings)
                     .then(function () {
-                        self.get("slaves").fetch();
-                        self.set("settings", settings);
+                        self.slaves.fetch();
+                        self.settings = settings;
                     });
             });
     }

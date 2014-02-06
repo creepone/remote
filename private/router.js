@@ -13,8 +13,8 @@ var routes = {
         { path: "/register", method: register.post, verb: "POST", anonymous: true },
         { path: "/dispatcher/execute", method: dispatcher.execute, verb: "POST" },
         { path: "/dispatcher/execute/result/:id", method: dispatcher.getCommandResult },
-        { path: "/settings/save", method: index.saveSettings, verb: "POST" },
-        { path: "/slaves", method: slaves.routes.get }
+        { path: "/slaves", method: slaves.routes.get },
+        { path: "/settings", method: index.saveSettings, verb: "PUT" }
     ],
 
     pages: [

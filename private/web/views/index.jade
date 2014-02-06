@@ -35,10 +35,10 @@ block content
           button.btn.btn-default(type="button",data-dismiss="modal") Close
 
   script(id="slave-template", type="text/template").
-    <div class="panel panel-default" data-slave="<%= slave.get("name") %>">
-      <div class="panel-heading"><%= slave.get("name") %></div>
+    <div class="panel panel-default" data-slave="<%= slave.name %>">
+      <div class="panel-heading"><%= slave.name %></div>
       <ul class="list-group">
-       <% _.each(slave.get("commands"), function(command, index) { %>
+       <% _.each(slave.commands, function(command, index) { %>
           <li class="list-group-item" data-command>
             <span><%= command.displayName %></span>
             <i class="glyphicon glyphicon-chevron-right" />

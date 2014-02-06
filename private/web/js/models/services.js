@@ -42,8 +42,8 @@ $.extend(exports, {
     },
     saveSettings: function(settings) {
         return ajax({
-            type: "POST",
-            url: "/settings/save",
+            type: "PUT",
+            url: "/settings",
             dataType: "json",
             data: JSON.stringify({ settings: settings }),
             contentType: "application/json; charset=utf-8"

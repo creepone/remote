@@ -1,7 +1,7 @@
 var $ = require("./lib/jquery"),
     Q = require("./lib/q.min"),
-    tools = require("./model/tools"),
-    services = require("./model/services");
+    tools = require("./models/tools"),
+    services = require("./models/services");
 
 require("./lib/bootstrap");
 

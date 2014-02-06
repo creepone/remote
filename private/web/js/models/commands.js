@@ -27,7 +27,7 @@ $.extend(exports, {
 
         return services.executeCommand(o)
             .then(function (cmd) {
-                return getCommandResult(cmd.id, 3);
+                return getCommandResult(cmd.id, 5);
             })
             .finally(function() {
                 queue = queue.filter(function (cmd) { return cmd !== o });
