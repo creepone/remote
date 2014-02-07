@@ -94,5 +94,6 @@ var Page = Backbone.View.extend({
     },
     onModalShown: function (event) {
         this._settingsArea.refresh();
+        this._settingsArea.focus();
     }
 });

@@ -1,69 +1,71 @@
 var $ = require("./lib/jquery"),
-    Q = require("./lib/q.min"),
+    Backbone = require("./lib/backbone"),
     tools = require("./models/tools"),
-    services = require("./models/services");
+    LoginPageModel = require("./models/login").LoginPageModel;
 
+// page script dependencies
 require("./lib/bootstrap");
 
 $(function () {
-    var uri = tools.parseUri(location);
-    if (uri.queryKey && uri.queryKey.fail)
-        onLoginFailed(uri.queryKey.fail); 
-    else if (autoAuthenticate())
-        return;
+    var data = JSON.parse($(".data").html());
 
-    createView();
+    var page = new Page({
+        model: new LoginPageModel(data),
+        el: document.body
+    });
+
+    page.render();
+    window.page = page;
 });
 
+var Page = Backbone.View.extend({
+    initialize: function () {
+        var model = this.model;
+        this.listenTo(model, "change", this.render);
 
-function createView()
-{
-    $("button[type='submit']").click(onLoginClick);
-    $("[name='email']").focus();
+        $("[name='email']").focus();
 
-    $("[data-passport]").click(onPassportClick);
-}
-
-function autoAuthenticate()
-{
-    var passport = localStorage && localStorage.getItem("passport");
-    if (!passport)
-        return false;
-    
-    var url = $("[data-passport=\"" + passport + "\"]").attr("href");
-    if (url)
-    {
-        window.location.href = url;
-        return true;
-    }
-
-    return false;
-}
-
-function onLoginClick(event)
-{
-    event.preventDefault();
-
-    services.login({
-        username: $("[name='email']").val(),
-        password: $("[name='password']").val()
-    })
-    .done(function () {
-        window.location.href = "/";
+        var uri = tools.parseUri(location);
+        if (uri.queryKey && uri.queryKey.fail)
+            this.reportLoginFailure(uri.queryKey.fail);
+        else
+            this.login("auto");
     },
-    tools.reportError);
-}
+    events: {
+        "input [name='email']": "onEmailChange",
+        "input [name='password']": "onPasswordChange",
+        "click [data-passport]": "onPassportClick",
+        "submit form": "onFormSubmit"
+    },
 
-function onPassportClick(event)
-{
-    var passport = $(this).attr("data-passport");
-    if (localStorage)
-        localStorage.setItem("passport", passport);
-}
+    render: function () {
+        var template = _.template($("#providers-template").html(), { providers: this.model.providers });
+        this.$el.find("#providers").html(template);
+    },
+    onEmailChange: function (event) {
+        this.model.email = $(event.currentTarget).val();
+    },
+    onPasswordChange: function (event) {
+        this.model.password = $(event.currentTarget).val();
+    },
+    onPassportClick: function (event) {
+        var passport = $(event.currentTarget).attr("data-passport");
+        this.login(passport);
+    },
+    onFormSubmit: function (event) {
+        event.preventDefault();
+        this.login();
+    },
 
-function onLoginFailed(provider)
-{
-	if (localStorage && localStorage.getItem("passport"))
-        localStorage.removeItem("passport");
-	tools.reportError("Provider login failed : " + provider); 
-}
+    login: function (passport) {
+        this.model.login(passport).done(function (url) {
+            if (url)
+                window.location.href = url;
+        },
+        tools.reportError);
+    },
+    reportLoginFailure: function (provider) {
+        this.model.removePassport();
+        tools.reportError("Provider login failed : " + provider);
+    }
+});

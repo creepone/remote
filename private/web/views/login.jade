@@ -13,6 +13,11 @@ block content
         a.btn.btn-default(href="/register") Register
     hr
     #providers
-        h6 Login with
-        a(href="/login/google", data-passport="google")
-            img(src="/img/google.png")
+
+    script(id="providers-template", type="text/template").
+      <h6>Login with</h6>
+      <% _.keys(providers).forEach(function (provider) { %>
+          <a data-passport="<%= provider %>">
+            <img src="<%= providers[provider].image %>" />
+          </a>
+      <% }); %>
