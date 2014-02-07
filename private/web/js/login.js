@@ -1,7 +1,7 @@
 var $ = require("./lib/jquery"),
     Backbone = require("./lib/backbone"),
     tools = require("./models/tools"),
-    LoginPageModel = require("./models/login").LoginPageModel;
+    LoginPageModel = require("./models/pages/login").LoginPageModel;
 
 // page script dependencies
 require("./lib/bootstrap");
@@ -20,9 +20,6 @@ $(function () {
 
 var Page = Backbone.View.extend({
     initialize: function () {
-        var model = this.model;
-        this.listenTo(model, "change", this.render);
-
         $("[name='email']").focus();
 
         var uri = tools.parseUri(location);

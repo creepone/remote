@@ -4,17 +4,18 @@ var Q = require("q"),
     login = require("./controllers/login"),
     register = require("./controllers/register"),
     dispatcher = require("./dispatcher"),
-    slaves = require("./models/slaves");
+    slaves = require("./models/slaves"),
+    users = require("./models/users");
 
 var routes = {
     endpoints: [
         { path: "/logout", method: authentication.logout, verb: "POST" },
         { path: "/login", method: authentication.login.local, verb: "POST", anonymous: true },
-        { path: "/register", method: register.post, verb: "POST", anonymous: true },
         { path: "/dispatcher/execute", method: dispatcher.execute, verb: "POST" },
         { path: "/dispatcher/execute/result/:id", method: dispatcher.getCommandResult },
         { path: "/slaves", method: slaves.routes.get },
-        { path: "/settings", method: index.saveSettings, verb: "PUT" }
+        { path: "/settings", method: index.saveSettings, verb: "PUT" },
+        { path: "/users", method: users.routes.post, verb: "POST", anonymous: true }
     ],
 
     pages: [

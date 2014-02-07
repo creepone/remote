@@ -1,7 +1,7 @@
-var _ = require("../lib/underscore"),
-    Q = require("../lib/q.min"),
-    Backbone = require("../lib/backbone"),
-    services = require("./services");
+var _ = require("../../lib/underscore"),
+    Q = require("../../lib/q.min.js"),
+    Backbone = require("../../lib/backbone"),
+    services = require("../services");
 
 var LoginPageModel = Backbone.Model.extend({
     properties: "providers,email,password",

@@ -1,7 +1,7 @@
 var db = require("./db"),
     Q = require("q"),
     crypto = require("crypto"),
-    User = require("./models/user").User,
+    User = require("./models/users").User,
     passport = require("passport"),
     LocalStrategy = require("passport-local").Strategy,
     GoogleStrategy = require("passport-google").Strategy;

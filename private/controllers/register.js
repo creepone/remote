@@ -1,7 +1,3 @@
-var db = require("../db"),
-    crypto = require("crypto"),
-    generatePassword = require("password-generator");
-
 exports.render = function (req, res) {
 
     // if available, pre-fill some fields from the provider
@@ -27,45 +23,12 @@ exports.render = function (req, res) {
 
     res.render("register", {
         provider: provider,
-        authToken: authToken,
-        email: email || "",
-        firstName: firstName || "",
-        lastName: lastName || "",
         data: {
+            email: email || "",
+            firstName: firstName || "",
+            lastName: lastName || "",
+            authToken: authToken,
             codeRequired: !!process.env.APP_REGISTRATION_CODE,
         }
     });
-};
-
-exports.post = function (req, res) {
-
-    var user = req.body.user;
-
-    if (!user.email || (!user.authToken && !user.password) || !user.firstName || !user.lastName)
-        return res.json({ error: "Missing data from the form" });
-
-    var registrationCode = process.env.APP_REGISTRATION_CODE || "";
-    if (registrationCode) {
-        if (user.registrationCode !== registrationCode)
-            return res.json({ error: "Invalid registration code." });
-        delete user.registrationCode;
-    }
-
-    // replace the plain text password with its hash before saving into db
-    if (user.password)
-        user.password = crypto.createHash('md5').update(user.password).digest("hex");
-
-    user.slaveToken = generatePassword(20, false);
-
-    return db.getUser({ email: user.email })
-        .then(function(duplicate) {
-            if (duplicate)
-                throw new Error("Email already in use");
-        })
-        .then(function() {
-            return db.insertUser(user);
-        })
-        .then(function () {
-            res.json({ success: true });
-        });
 };

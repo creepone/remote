@@ -3,7 +3,7 @@ var $ = require("./lib/jquery"),
     Backbone = require("./lib/backbone"),
     CodeMirror = require("./lib/codemirror"),
     tools = require("./models/tools"),
-    IndexPageModel = require("./models/index").IndexPageModel,
+    IndexPageModel = require("./models/pages/index").IndexPageModel,
     SlaveView = require("./views/slave").SlaveView;
 
 // page script dependencies

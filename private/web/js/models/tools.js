@@ -45,6 +45,22 @@ Backbone.Model.extend = (function (extend) {
     };
 })(Backbone.Model.extend);
 
+Backbone.Model.prototype.save = (function (save) {
+    return function (key, val, options) {
+        var deferred = Q.defer(),
+            args = [].slice.apply(arguments);
+
+        var optionsIndex = (key == null || typeof key === 'object') ? 1 : 2;
+        args[optionsIndex] = _.extend(args[optionsIndex] || {}, {
+            success: function (model, res, options) { deferred.resolve(); },
+            error: function (model, xhr, options) { deferred.reject(); }
+        });
+        save.apply(this, args);
+        return deferred.promise;
+    };
+})(Backbone.Model.prototype.save);
+
+
 exports.parseUri = function(str) {
 
     // parseUri 1.2.2

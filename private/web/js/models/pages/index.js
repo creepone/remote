@@ -1,7 +1,7 @@
-var _ = require("../lib/underscore"),
-    Backbone = require("../lib/backbone"),
-    services = require("./services"),
-    Slave = require("./slave").Slave;
+var _ = require("../../lib/underscore"),
+    Backbone = require("../../lib/backbone"),
+    services = require("./../services"),
+    Slave = require("./../slave").Slave;
 
 var IndexPageModel = Backbone.Model.extend({
     properties: "settings,slaves,slaveToken",
