@@ -1,0 +1,12 @@
+<div class="panel panel-default" data-slave="<%= slave.name %>">
+    <div class="panel-heading"><%= slave.name %></div>
+    <ul class="list-group">
+        <% _.each(slave.commands, function(command, index) { %>
+        <li class="list-group-item" data-command>
+            <span><%= command.displayName %></span>
+            <i class="glyphicon glyphicon-chevron-right" />
+            <img src="/img/loader.gif" />
+        </li>
+        <% }); %>
+    </ul>
+</div>

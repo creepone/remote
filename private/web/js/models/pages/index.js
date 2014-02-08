@@ -3,16 +3,16 @@ var _ = require("../../lib/underscore"),
     services = require("./../services"),
     Slave = require("./../slave").Slave;
 
+var Slaves = Backbone.Collection.extend({
+    model: Slave,
+    url: "/slaves",
+    comparator: "name"
+});
+
 var IndexPageModel = Backbone.Model.extend({
     properties: "settings,slaves,slaveToken",
-    constructor: function(o) {
-        var Slaves = Backbone.Collection.extend({ 
-            model: Slave,
-            url: "/slaves",
-            comparator: "name"
-        });
-        o.slaves = new Slaves(o.slaves || []);
-        Backbone.Model.apply(this, arguments);
+    initialize: function() {
+        this.slaves = new Slaves(this.slaves || []);
     },
 
     logout: function () {

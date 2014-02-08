@@ -72,7 +72,7 @@ exports.parseUri = function(str) {
 
     uri[o.q.name] = {};
     uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
-        if ($1) uri[o.q.name][$1] = $2;
+        if ($1) uri[o.q.name][decodeURIComponent($1)] = decodeURIComponent($2);
     });
 
     return uri;

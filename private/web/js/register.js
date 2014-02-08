@@ -24,9 +24,6 @@ var Page = Backbone.View.extend({
         var model = this.model;
         this.listenTo(model, "change", this.render);
         this.listenTo(model, "invalid", this.onModelInvalid);
-
-        var firstEmptyInput = this.$el.find("input").filter(function () { return !$(this).val(); })[0];
-        $(firstEmptyInput).focus();
     },
     events: {
         "input input[name]": "onPropertyChange",
@@ -35,7 +32,8 @@ var Page = Backbone.View.extend({
     },
 
     render: function () {
-        // rendered server-side
+        var firstEmptyInput = this.$el.find("input").filter(function () { return !$(this).val(); })[0];
+        $(firstEmptyInput).focus();
     },
     onPropertyChange: function (event) {
         var $el = $(event.currentTarget);

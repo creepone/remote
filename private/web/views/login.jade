@@ -14,10 +14,5 @@ block content
     hr
     #providers
 
-    script(id="providers-template", type="text/template").
-      <h6>Login with</h6>
-      <% _.keys(providers).forEach(function (provider) { %>
-          <a data-passport="<%= provider %>">
-            <img src="<%= providers[provider].image %>" />
-          </a>
-      <% }); %>
+    script(id="providers-template", type="text/template")
+      include templates/providers.html

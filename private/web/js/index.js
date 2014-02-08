@@ -58,10 +58,9 @@ var Page = Backbone.View.extend({
 
     render: function () {
         var self = this;
-
         this.$el.find("#loader").hide();
-
         this.$el.find("#slaves").empty();
+
         var slaves = this.model.slaves;
         slaves.each(function (slave) {
             self.onSlaveAdd(slave, slaves);

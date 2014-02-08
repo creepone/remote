@@ -29,8 +29,7 @@ var Page = Backbone.View.extend({
             this.login("auto");
     },
     events: {
-        "input [name='email']": "onEmailChange",
-        "input [name='password']": "onPasswordChange",
+        "input input[name]": "onPropertyChange",
         "click [data-passport]": "onPassportClick",
         "submit form": "onFormSubmit"
     },
@@ -39,11 +38,10 @@ var Page = Backbone.View.extend({
         var template = _.template($("#providers-template").html(), { providers: this.model.providers });
         this.$el.find("#providers").html(template);
     },
-    onEmailChange: function (event) {
-        this.model.email = $(event.currentTarget).val();
-    },
-    onPasswordChange: function (event) {
-        this.model.password = $(event.currentTarget).val();
+    onPropertyChange: function (event) {
+        var $el = $(event.currentTarget);
+        var prop = $el.attr("name");
+        this.model.set(prop, $el.val());
     },
     onPassportClick: function (event) {
         var passport = $(event.currentTarget).attr("data-passport");
