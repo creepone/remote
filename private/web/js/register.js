@@ -50,7 +50,7 @@ var Page = Backbone.View.extend({
         event.preventDefault();
 
         var $el = this.$el;
-        this.model.save()
+        Q(this.model.save())
             .done(function () {
                 $el.find("form :input").attr({ disabled: true });
                 $el.find(".alert-success").show();
