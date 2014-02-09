@@ -1,49 +1,9 @@
-var $ = require("../lib/jquery"),
-    Q = require("../lib/q.min.js"),
-    _ = require("../lib/underscore"),
-    Backbone = require("../lib/backbone");
+var $ = require("jquery");
 
 $(function () {
     // reveal all the ui (preventing flash of unstyled content)
     $(".fouc").removeClass("fouc");
 });
-
-$.fn.insertAt = function (index, element) {
-    if (index === 0)
-        this.prepend(element);
-    else if (index > this.children().length)
-        this.append(element);
-    else
-        this.children(":nth-child(" + index + ")").after(element);
-    return this;
-};
-
-Backbone.Model.extend = (function (extend) {
-    return function (o) {
-        // call base version
-        var constructor = extend.apply(Backbone.Model, [].slice.apply(arguments));
-
-        var properties = o.properties;
-        if (typeof (properties) == "string")
-            properties = properties.split(",");
-        if (_.isArray(properties))
-            properties = _.object(properties.map(function (p) { return [p, {}]; }));
-
-        if (!properties)
-            return constructor;
-
-        Object.keys(properties).forEach(function (key) {
-            $.extend(properties[key],
-            {
-                get: _.partial(constructor.prototype.get, key),
-                set: _.partial(constructor.prototype.set, key)
-            });
-        });
-
-        Object.defineProperties(constructor.prototype, properties);
-        return constructor;
-    };
-})(Backbone.Model.extend);
 
 exports.parseUri = function(str) {
 

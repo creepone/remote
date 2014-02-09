@@ -1,5 +1,5 @@
-var $ = require("../lib/jquery"),
-    Q = require("../lib/q.min.js"),
+var $ = require("jquery"),
+    Q = require("q"),
     ajax = require("./ajax");
 
 var queue = [];

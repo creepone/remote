@@ -1,6 +1,6 @@
-var $ = require("../lib/jquery"),
-    _ = require("../lib/underscore"),
-    Backbone = require("../lib/backbone"),
+var $ = require("jquery"),
+    _ = require("underscore"),
+    Backbone = require("backbone"),
     tools = require("../services/tools");
 
 var SlaveView = Backbone.View.extend({

@@ -2,6 +2,15 @@
     "browserify": {
         "transform": [ "browserify-shim" ]
     },
+    "browser": {
+        "jquery": "./lib/extensions/jquery.js",
+        "backbone": "./lib/extensions/backbone.js",
+        "underscore": "./lib/underscore.js",
+        "q": "./lib/q.min.js",
+        "codemirror": "./lib/codemirror.js",
+        "codemirror-js": "./lib/codemirror_javascript.js",
+        "bootstrap": "./lib/bootstrap.js"
+    },
     "browserify-shim": {
         "./lib/q.min.js": "Q",
         "./lib/jquery.js": "$",

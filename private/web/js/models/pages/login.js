@@ -1,6 +1,6 @@
-var _ = require("../../lib/underscore"),
-    Q = require("../../lib/q.min.js"),
-    Backbone = require("../../lib/backbone"),
+var _ = require("underscore"),
+    Q = require("q"),
+    Backbone = require("backbone"),
     ajax = require("../../services/ajax");
 
 var LoginPageModel = Backbone.Model.extend({

@@ -1,15 +1,15 @@
-var $ = require("../../lib/jquery"),
-    _ = require("../../lib/underscore"),
-    Q = require("../../lib/q.min"),
-    Backbone = require("../../lib/backbone"),
-    CodeMirror = require("../../lib/codemirror"),
+var $ = require("jquery"),
+    _ = require("underscore"),
+    Q = require("q"),
+    Backbone = require("backbone"),
+    CodeMirror = require("codemirror"),
     tools = require("../../services/tools"),
     IndexPageModel = require("../../models/pages/index").IndexPageModel,
     SlaveView = require("../slave").SlaveView;
 
 // page script dependencies
-require("../../lib/bootstrap");
-require("../../lib/codemirror_javascript");
+require("bootstrap");
+require("codemirror-js");
 
 $(function() {
     var data = JSON.parse($(".data").html());

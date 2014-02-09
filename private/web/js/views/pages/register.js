@@ -1,11 +1,10 @@
-var $ = require("./../../lib/jquery"),
-    Backbone = require("./../../lib/backbone"),
-    ajax = require("../../services/ajax"),
+var $ = require("jquery"),
+    Backbone = require("backbone"),
     tools = require("../../services/tools"),
-    RegisterPageModel = require("./../../models/pages/register").RegisterPageModel;
+    RegisterPageModel = require("../../models/pages/register").RegisterPageModel;
 
 // page script dependencies
-require("./../../lib/bootstrap");
+require("bootstrap");
 
 $(function () {
     var data = JSON.parse($(".data").html());
