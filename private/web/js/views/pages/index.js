@@ -1,14 +1,15 @@
-var $ = require("./lib/jquery"),
-    _ = require("./lib/underscore"),
-    Backbone = require("./lib/backbone"),
-    CodeMirror = require("./lib/codemirror"),
-    tools = require("./models/tools"),
-    IndexPageModel = require("./models/pages/index").IndexPageModel,
-    SlaveView = require("./views/slave").SlaveView;
+var $ = require("../../lib/jquery"),
+    _ = require("../../lib/underscore"),
+    Q = require("../../lib/q.min"),
+    Backbone = require("../../lib/backbone"),
+    CodeMirror = require("../../lib/codemirror"),
+    tools = require("../../services/tools"),
+    IndexPageModel = require("../../models/pages/index").IndexPageModel,
+    SlaveView = require("../slave").SlaveView;
 
 // page script dependencies
-require("./lib/bootstrap");
-require("./lib/codemirror_javascript");
+require("../../lib/bootstrap");
+require("../../lib/codemirror_javascript");
 
 $(function() {
     var data = JSON.parse($(".data").html());
@@ -31,7 +32,8 @@ var Page = Backbone.View.extend({
         this.listenTo(model.slaves, "add", this.onSlaveAdd);
         this.listenTo(model.slaves, "remove", this.onSlaveRemove);
 
-        setInterval(function () { model.slaves.fetch(); }, 60000);
+        this.$el.find("#loader").hide();
+        setInterval(function () { model.slaves.fetch().catch(tools.reportError); }, 60000);
     },
     events: {
         "click #logout": "onLogoutClick",
@@ -58,7 +60,6 @@ var Page = Backbone.View.extend({
 
     render: function () {
         var self = this;
-        this.$el.find("#loader").hide();
         this.$el.find("#slaves").empty();
 
         var slaves = this.model.slaves;

@@ -1,5 +1,5 @@
 var $ = require("../lib/jquery"),
-    Q = require("../lib/q.min"),
+    Q = require("../lib/q.min.js"),
     _ = require("../lib/underscore"),
     Backbone = require("../lib/backbone");
 

@@ -1,7 +1,7 @@
 var _ = require("../../lib/underscore"),
     Q = require("../../lib/q.min.js"),
     Backbone = require("../../lib/backbone"),
-    services = require("../services");
+    ajax = require("../../services/ajax");
 
 var LoginPageModel = Backbone.Model.extend({
     properties: "providers,email,password",
@@ -19,7 +19,7 @@ var LoginPageModel = Backbone.Model.extend({
             return Q(provider.url);
         }
 
-        return services.login({
+        return ajax.login({
             username: this.email,
             password: this.password
         })

@@ -1,6 +1,6 @@
 var $ = require("../lib/jquery"),
-    Q = require("../lib/q.min"),
-    services = require("./services");
+    Q = require("../lib/q.min.js"),
+    ajax = require("./ajax");
 
 var queue = [];
 
@@ -8,7 +8,7 @@ function getCommandResult(commandId, retries) {
     if (!retries)
         throw new Error("Command timed out.");
 
-    return services.getCommandResult(commandId)
+    return ajax.getCommandResult(commandId)
         .then(function (res) {
             if (res && res.done)
                 return res.result;
@@ -25,7 +25,7 @@ $.extend(exports, {
 
         queue.push(o);
 
-        return services.executeCommand(o)
+        return ajax.executeCommand(o)
             .then(function (cmd) {
                 return getCommandResult(cmd.id, 5);
             })

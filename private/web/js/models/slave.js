@@ -1,6 +1,6 @@
 var _ = require("../lib/underscore"),
     Backbone = require("../lib/backbone"),
-    commands = require("./commands");
+    commands = require("../services/commands");
 
 var Slave = Backbone.Model.extend({
     properties: "name,commands",

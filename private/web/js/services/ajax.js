@@ -1,8 +1,7 @@
 var $ = require("../lib/jquery"),
     _ = require("../lib/underscore"),
     Backbone = require("../lib/backbone"),
-    tools = require("./tools"),
-    Q = require("../lib/q.min");
+    Q = require("../lib/q.min.js");
 
 function ajax(o) {
     return Q($.ajax(o))
@@ -15,11 +14,7 @@ function ajax(o) {
             });
 }
 
-Backbone.ajax = function (o) {
-    ajax(o).catch(function (err) {
-        tools.reportError(err);
-    });
-};
+Backbone.ajax = ajax;
 
 $.extend(exports, {
     login: function (credentials) {

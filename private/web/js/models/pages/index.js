@@ -1,7 +1,7 @@
 var _ = require("../../lib/underscore"),
     Backbone = require("../../lib/backbone"),
-    services = require("./../services"),
-    Slave = require("./../slave").Slave;
+    ajax = require("../../services/ajax"),
+    Slave = require("../slave").Slave;
 
 var Slaves = Backbone.Collection.extend({
     model: Slave,
@@ -16,7 +16,7 @@ var IndexPageModel = Backbone.Model.extend({
     },
 
     logout: function () {
-        return services.logout()
+        return ajax.logout()
             .then(function () {
                 if (localStorage && localStorage.getItem("passport"))
                     localStorage.removeItem("passport");
@@ -33,7 +33,7 @@ var IndexPageModel = Backbone.Model.extend({
 
         return Q.try(function () { return JSON.parse(jsonValue); })
             .then(function (settings) {
-                return services.saveSettings(settings)
+                return ajax.saveSettings(settings)
                     .then(function () {
                         self.slaves.fetch();
                         self.settings = settings;

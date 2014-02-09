@@ -1,7 +1,7 @@
 var $ = require("../lib/jquery"),
     _ = require("../lib/underscore"),
     Backbone = require("../lib/backbone"),
-    tools = require("../models/tools");
+    tools = require("../services/tools");
 
 var SlaveView = Backbone.View.extend({
     initialize: function() {

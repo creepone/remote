@@ -1,11 +1,11 @@
-var $ = require("./lib/jquery"),
-    Backbone = require("./lib/backbone"),
-    tools = require("./models/tools"),
-    services = require("./models/services"),
-    RegisterPageModel = require("./models/pages/register").RegisterPageModel;
+var $ = require("./../../lib/jquery"),
+    Backbone = require("./../../lib/backbone"),
+    ajax = require("../../services/ajax"),
+    tools = require("../../services/tools"),
+    RegisterPageModel = require("./../../models/pages/register").RegisterPageModel;
 
 // page script dependencies
-require("./lib/bootstrap");
+require("./../../lib/bootstrap");
 
 $(function () {
     var data = JSON.parse($(".data").html());
@@ -24,6 +24,9 @@ var Page = Backbone.View.extend({
         var model = this.model;
         this.listenTo(model, "change", this.render);
         this.listenTo(model, "invalid", this.onModelInvalid);
+
+        var firstEmptyInput = this.$el.find("input").filter(function () { return !$(this).val(); })[0];
+        $(firstEmptyInput).focus();
     },
     events: {
         "input input[name]": "onPropertyChange",
@@ -32,8 +35,7 @@ var Page = Backbone.View.extend({
     },
 
     render: function () {
-        var firstEmptyInput = this.$el.find("input").filter(function () { return !$(this).val(); })[0];
-        $(firstEmptyInput).focus();
+        // rendered server-side
     },
     onPropertyChange: function (event) {
         var $el = $(event.currentTarget);
@@ -48,11 +50,11 @@ var Page = Backbone.View.extend({
         event.preventDefault();
 
         var $el = this.$el;
-        Q(this.model.save())
+        this.model.save()
             .done(function () {
                 $el.find("form :input").attr({ disabled: true });
                 $el.find(".alert-success").show();
-            });
+            }, tools.reportError);
     },
     onModelInvalid: function (model, error) {
         var $field = $("input[name='" + error.name + "']");
