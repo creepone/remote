@@ -24,7 +24,7 @@ var Page = Backbone.View.extend({
         this.listenTo(model, "change", this.render);
         this.listenTo(model, "invalid", this.onModelInvalid);
 
-        var firstEmptyInput = this.$el.find("input").filter(function () { return !$(this).val(); })[0];
+        var firstEmptyInput = this.$("input").filter(function () { return !$(this).val(); })[0];
         $(firstEmptyInput).focus();
     },
     events: {
@@ -48,11 +48,11 @@ var Page = Backbone.View.extend({
     onFormSubmit: function (event) {
         event.preventDefault();
 
-        var $el = this.$el;
+        var $ = this.$;
         this.model.save()
             .done(function () {
-                $el.find("form :input").attr({ disabled: true });
-                $el.find(".alert-success").show();
+                $("form :input").attr({ disabled: true });
+                $(".alert-success").show();
             }, tools.reportError);
     },
     onModelInvalid: function (model, error) {

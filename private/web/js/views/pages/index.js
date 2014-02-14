@@ -32,7 +32,7 @@ var Page = Backbone.View.extend({
         this.listenTo(model.slaves, "add", this.onSlaveAdd);
         this.listenTo(model.slaves, "remove", this.onSlaveRemove);
 
-        this.$el.find("#loader").hide();
+        this.$("#loader").hide();
         setInterval(function () { model.slaves.fetch().catch(tools.reportError); }, 60000);
     },
     events: {
@@ -48,7 +48,7 @@ var Page = Backbone.View.extend({
             model: slave
         });
 
-        this.$el.find("#slaves").insertAt(index, slaveView.el);
+        this.$("#slaves").insertAt(index, slaveView.el);
         this.slaveViews.splice(index, 0, slaveView);
         slaveView.render();
     },
@@ -60,7 +60,7 @@ var Page = Backbone.View.extend({
 
     render: function () {
         var self = this;
-        this.$el.find("#slaves").empty();
+        this.$("#slaves").empty();
 
         var slaves = this.model.slaves;
         slaves.each(function (slave) {
@@ -72,7 +72,7 @@ var Page = Backbone.View.extend({
         this.model.logout().catch(tools.reportError);
     },
     onSettingsClick: function (event) {
-        this._settingsArea = this._settingsArea || CodeMirror.fromTextArea(this.$el.find("#settingsJson")[0], {
+        this._settingsArea = this._settingsArea || CodeMirror.fromTextArea(this.$("#settingsJson")[0], {
             mode: { name: "javascript", json: true },
             autofocus: true
         });
@@ -81,14 +81,14 @@ var Page = Backbone.View.extend({
         $(".modal").modal("show");
     },
     onSaveSettingsClick: function (event) {
-        var $el = this.$el;
+        var $ = this.$;
 
         this.model.saveSettings(this._settingsArea.getValue())
             .done(function () {
-                $el.find(".modal").modal("hide");
+                $(".modal").modal("hide");
             },
             function (err) {
-                tools.reportError(err, $el.find(".modal-body"));
+                tools.reportError(err, $(".modal-body"));
             });
 
     },

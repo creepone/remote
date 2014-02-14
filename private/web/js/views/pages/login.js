@@ -35,8 +35,8 @@ var Page = Backbone.View.extend({
     },
 
     render: function () {
-        var template = _.template($("#providers-template").html(), { providers: this.model.providers });
-        this.$el.find("#providers").html(template);
+        var template = _.template(this.$("#providers-template").html(), { providers: this.model.providers });
+        this.$("#providers").html(template);
     },
     onPropertyChange: function (event) {
         var $el = $(event.currentTarget);
