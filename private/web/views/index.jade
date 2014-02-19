@@ -8,6 +8,7 @@ block head
 
 block header-content
   a.navbar-text#settings(href="#"): i.glyphicon.glyphicon-wrench
+  a.navbar-text#history(href="#"): i.glyphicon.glyphicon-tasks
   a.navbar-text.navbar-right#logout(href="#"): i.glyphicon.glyphicon-eject
   p.navbar-text.navbar-right#username= (data.username || "")
 
@@ -17,6 +18,8 @@ block content
       img(src="../img/spinner.gif")
 
   #slaves
+
+  #executions
 
   .modal.fade(tabindex="-1",role="dialog")
     .modal-dialog.modal-lg

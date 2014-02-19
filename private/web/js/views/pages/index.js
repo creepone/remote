@@ -36,8 +36,11 @@ var Page = Backbone.View.extend({
         setInterval(function () { model.slaves.fetch().catch(tools.reportError); }, 60000);
     },
     events: {
+        "click a.navbar-brand": "onBrandClick",
         "click #logout": "onLogoutClick",
         "click #settings": "onSettingsClick",
+        "click #history": "onHistoryClick",
+        "click #history.active": "onHistoryActiveClick",
         "click #saveSettings": "onSaveSettingsClick",
         "shown.bs.modal .modal": "onModalShown"
     },
@@ -66,12 +69,16 @@ var Page = Backbone.View.extend({
         slaves.each(function (slave) {
             self.onSlaveAdd(slave, slaves);
         });
+
+        // todo: render executions as well (though hidden initially)
     },
     onLogoutClick: function (event) {
         event.preventDefault();
         this.model.logout().catch(tools.reportError);
     },
     onSettingsClick: function (event) {
+        event.preventDefault();
+
         this._settingsArea = this._settingsArea || CodeMirror.fromTextArea(this.$("#settingsJson")[0], {
             mode: { name: "javascript", json: true },
             autofocus: true
@@ -79,6 +86,18 @@ var Page = Backbone.View.extend({
 
         this._settingsArea.setValue(this.model.getPrettySettings());
         $(".modal").modal("show");
+    },
+    onBrandClick: function (event) {
+        event.preventDefault();
+        this._toggleHistory(false);
+    },
+    onHistoryClick: function (event) {
+        event.preventDefault();
+        this._toggleHistory(true);
+    },
+    onHistoryActiveClick: function (event) {
+        event.preventDefault();
+        this._toggleHistory(false);
     },
     onSaveSettingsClick: function (event) {
         var $ = this.$;
@@ -95,5 +114,10 @@ var Page = Backbone.View.extend({
     onModalShown: function (event) {
         this._settingsArea.refresh();
         this._settingsArea.focus();
+    },
+    _toggleHistory: function (show) {
+        this.$("#executions").toggle(show);
+        this.$("#slaves").toggle(!show);
+        this.$("#history").toggleClass("active", show);
     }
 });

@@ -69,6 +69,21 @@ _.extend(exports, {
     },
 
     /*
+     Queries the database for the executions using the condition specified in o.
+    */
+    findExecutions: function(o, settings)
+    {
+        var res = _getCollection("executions")
+            .then(function (executions) {
+                var deferred = Q.defer();
+                executions.find(o, deferred.makeNodeResolver());
+                return deferred.promise;
+            });
+
+        return _applyCursorSettings(res, settings);
+    },
+
+    /*
      Queries the database for the settings with properties specified in o.
      */
     getSettings: function(o)
@@ -138,10 +153,23 @@ function _getCollection(name)
 
 function _applyCursorSettings(promise, settings)
 {
-    if (settings && settings.sort)
+    if (!settings)
+        return promise;
+
+    if (settings.sort)
         promise = promise.then(_sortCursor.bind(null, settings.sort));
 
-    if (settings && settings.lazy === false)
+    if (settings.skip)
+        promise = promise.then(function (cursor) {
+            return Q.ninvoke(cursor, "skip", settings.skip);
+        });
+
+    if (settings.limit)
+        promise = promise.then(function (cursor) {
+            return Q.ninvoke(cursor, "limit", settings.limit);
+        });
+
+    if (settings.lazy === false)
         promise = promise.then(_iterateCursor);
 
     return promise;

@@ -36,6 +36,7 @@ exports.execute = function (req, res) {
 
     var execution = {
         _id: id,
+        userId: req.user._id,
         timestamp: +new Date(),
         slave: req.body.slave,
         command: req.body.command

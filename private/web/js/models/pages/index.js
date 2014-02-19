@@ -1,7 +1,8 @@
 var _ = require("underscore"),
     Backbone = require("backbone"),
     ajax = require("../../services/ajax"),
-    Slave = require("../slave").Slave;
+    Slave = require("../slave").Slave,
+    Executions = require("../executions").Executions;
 
 var Slaves = Backbone.Collection.extend({
     model: Slave,
@@ -13,6 +14,8 @@ var IndexPageModel = Backbone.Model.extend({
     properties: "settings,slaves,slaveToken",
     initialize: function() {
         this.slaves = new Slaves(this.slaves || []);
+        this.executions = new Executions([]);
+        // TODO: this.executions.fetch({ data: { limit: 5, skip: 5 } });
     },
 
     logout: function () {

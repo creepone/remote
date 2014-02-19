@@ -5,7 +5,8 @@ var Q = require("q"),
     register = require("./controllers/register"),
     dispatcher = require("./dispatcher"),
     slaves = require("./models/slaves"),
-    users = require("./models/users");
+    users = require("./models/users"),
+    executions = require("./models/executions");
 
 var routes = {
     endpoints: [
@@ -14,6 +15,7 @@ var routes = {
         { path: "/dispatcher/execute", method: dispatcher.execute, verb: "POST" },
         { path: "/dispatcher/execute/result/:id", method: dispatcher.getCommandResult },
         { path: "/slaves", method: slaves.routes.get },
+        { path: "/executions", method: executions.routes.get },
         { path: "/settings", method: index.saveSettings, verb: "PUT" },
         { path: "/users", method: users.routes.post, verb: "POST", anonymous: true }
     ],
